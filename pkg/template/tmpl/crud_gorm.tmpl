@@ -1,0 +1,89 @@
+
+package dao
+
+import (
+	"context"
+
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+
+    {{- range .Imports }}
+    "{{ . }}"
+    {{- end }}
+)
+
+type {{ .StructName }}Dao interface {
+	Create{{ .StructName }}(ctx context.Context, approvalInfo *{{ .ModelPackage }}.{{ .StructName }}) error
+	// CreateApprovalSample(ctx context.Context)
+	Get{{ .StructName }}(ctx context.Context, opts ...DaoOpt) (*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, error)
+	Search{{ .StructName }}(ctx context.Context, page, pageSize int, isAll bool, opts ...DaoOpt) ([]*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, int, error)
+	Update{{ .StructName }}(ctx context.Context, opts ...DaoOpt) (*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, error)
+}
+
+func (d *dao) Create{{ .StructName }}(ctx context.Context, v *{{ .ModelPackage }}.{{ .StructName }}) error {
+	tx := d.tryGetTx(ctx)
+
+	err := tx.Create(&v).Error
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (d *dao) Get{{ .StructName }}(ctx context.Context, opts ...DaoOpt) (*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, error) {
+	opt := d.fromDaoOptions(ctx, opts...)
+
+	var v {{ .ModelPackage }}.{{ .StructNameWithPreload }}
+	err := opt.tx.Take(&v).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = Err{{ .StructName }}NotFound
+		}
+		return nil, opt.wrapError(err)
+	}
+
+	return &v, nil
+}
+
+func (d *dao) Search{{ .StructName }}(ctx context.Context, page, pageSize int, isAll bool, opts ...DaoOpt) ([]*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, int, error) {
+	opt := d.fromDaoOptions(ctx, opts...)
+
+	count := int64(0)
+	err := opt.tx.Model(&{{ .ModelPackage }}.{{ .StructName }}{}).Count(&count).Error
+	if err != nil {
+		return nil, 0, opt.wrapError(err)
+	}
+
+	if !isAll {
+		opt.tx = opt.tx.Offset((page - 1) * pageSize).Limit(pageSize)
+	}
+
+	v := []*{{ .ModelPackage }}.{{ .StructNameWithPreload }}{}
+	err = opt.tx.Find(&v).Error
+	if err != nil {
+		return nil, 0, opt.wrapError(err)
+	}
+
+	return v, int(count), nil
+}
+
+func (d *dao) Update{{ .StructName }}(ctx context.Context, opts ...DaoOpt) (*{{ .ModelPackage }}.{{ .StructNameWithPreload }}, error) {
+	opt := d.fromDaoOptions(ctx, opts...)
+
+	v, err := d.Get{{ .StructName }}(ctx, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(opt.updateMap) == 0 {
+		return v, nil
+	}
+
+	err = opt.tx.Model(v.{{ .StructName }}).Updates(opt.updateMap).Error
+	if err != nil {
+		return nil, opt.wrapError(err)
+	}
+
+	return v, nil
+}

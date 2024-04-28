@@ -1,0 +1,11 @@
+package dao
+
+import (
+	"fmt"
+)
+
+var (
+	{{- range .Tables }}
+	Err{{ .StructName }}NotFound = fmt.Errorf("{{ .NameWithSpace }} not found")
+	{{- end }}
+)

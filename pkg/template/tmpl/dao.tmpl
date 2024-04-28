@@ -1,0 +1,30 @@
+package dao
+
+import (
+	"context"
+	"database/sql"
+	"time"
+
+	"gorm.io/gorm"
+)
+
+const (
+	// slowSqlThreshold 慢sql阈值
+	slowSQLThreshold = time.Millisecond * 200
+	// logSQLMaxLength 日志中打印的sql最大长度
+	logSQLMaxLength = 1000
+)
+
+type GenDao interface {
+{{- range .Tables }}
+    {{ .StructName }}Dao
+{{- end }}
+	WithTransaction(ctx context.Context, opts ...*sql.TxOptions) context.Context
+	// 重复调用实际只会执行一次
+	FinishTransaction(ctx context.Context) error
+	Transaction(ctx context.Context, f func(ctx context.Context) error, opts ...*sql.TxOptions) (err error)
+}
+
+type dao struct {
+	db *gorm.DB
+}
