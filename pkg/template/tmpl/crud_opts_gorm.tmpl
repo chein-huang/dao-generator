@@ -107,7 +107,7 @@ type {{ .StructNameSmallCamel }}Updates struct{}
 var {{ .StructName }}Updates {{ .StructNameSmallCamel }}Updates
 
 {{- range .Fields }}
-func (*{{ $.StructNameSmallCamel }}Updates) WithUpdateState(v {{ .Type }}) DaoOpt {
+func (*{{ $.StructNameSmallCamel }}Updates) WithUpdate{{ .Name }}(v {{ .Type }}) DaoOpt {
 	return daoOpt(func(opt *daoOptions) {
 		opt.setUpdateMap("{{ .NameSnake }}", v)
 	})

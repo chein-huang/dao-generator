@@ -80,7 +80,11 @@ func (d *dao) Update{{ .StructName }}(ctx context.Context, opts ...DaoOpt) (*{{ 
 		return v, nil
 	}
 
+{{- if .IsPreload }}
 	err = opt.tx.Model(v.{{ .StructName }}).Updates(opt.updateMap).Error
+{{- else }}
+	err = opt.tx.Model(v).Updates(opt.updateMap).Error
+{{- end }}
 	if err != nil {
 		return nil, opt.wrapError(err)
 	}

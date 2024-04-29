@@ -22,9 +22,7 @@ const (
 )
 
 type GenDao interface {
-{{- range .Tables }}
-    {{ .StructName }}Dao
-{{- end }}
+    ApprovalInfoDao
 	WithTransaction(ctx context.Context, opts ...*sql.TxOptions) context.Context
 	// 重复调用实际只会执行一次
 	FinishTransaction(ctx context.Context) error

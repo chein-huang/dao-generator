@@ -12,6 +12,7 @@ type GenerationMetaData struct {
 type GenerationTable struct {
 	Name                  string
 	NameWithSpace         string
+	IsPreload             bool
 	StructName            string
 	StructNameSmallCamel  string
 	Imports               []string
