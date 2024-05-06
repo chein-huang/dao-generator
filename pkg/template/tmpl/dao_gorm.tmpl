@@ -4,7 +4,6 @@ package dao
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	"encoding/json"
 	"fmt"
@@ -13,13 +12,6 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/pkg/errors"
-)
-
-const (
-	// slowSqlThreshold 慢sql阈值
-	slowSQLThreshold = time.Millisecond * 200
-	// logSQLMaxLength 日志中打印的sql最大长度
-	logSQLMaxLength = 1000
 )
 
 type GenDao interface {
