@@ -11,8 +11,8 @@ var crudGormTmplStr string
 //go:embed tmpl/dao_gorm.tmpl
 var daoGormTmplStr string
 
-//go:embed tmpl/errors.tmpl
-var errorsTmplStr string
+//go:embed tmpl/errors_gorm.tmpl
+var errorsGormTmplStr string
 
 //go:embed tmpl/transaction_gorm.tmpl
 var transactionGormTmplStr string
@@ -35,7 +35,7 @@ func init() {
 		panic(err)
 	}
 
-	_, err = ErrorsTmpl.Parse(errorsTmplStr)
+	_, err = ErrorsTmpl.Parse(errorsGormTmplStr)
 	if err != nil {
 		panic(err)
 	}
