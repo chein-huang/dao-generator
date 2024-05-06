@@ -2,7 +2,7 @@
  * @Author: huangcheng1 huangcheng1@sensetime.com
  * @Date: 2024-04-28 10:49:04
  * @LastEditors: huangcheng1 huangcheng1@sensetime.com
- * @LastEditTime: 2024-04-30 16:32:14
+ * @LastEditTime: 2024-05-06 14:12:03
  * @FilePath: /dao-generator/resource/testmodel/approval.go
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,14 +14,15 @@ import (
 	"gorm.io/gorm"
 )
 
-// gen:"ApprovalInfo,tableName:approval_info,flags:isPreload"
+// gen:"ApprovalInfo,nameSnake:approval_info,flags:isPreload"
 type ApprovalInfoWithAuth struct {
 	*ApprovalInfo
 	// gen:"orderBy:created_at DESC"
 	AuthInfo *AuthInfo `gorm:"foreignKey:AuthID"`
 }
 type ApprovalInfo struct {
-	ID        string `gorm:"primaryKey;type:varchar(36)"`
+	ID string `gorm:"primaryKey;type:varchar(36)"`
+	// gen:"flags:range;order"
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`

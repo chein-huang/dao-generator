@@ -2,7 +2,6 @@ package generator
 
 import (
 	"fmt"
-	"go/ast"
 	"go/parser"
 	"go/token"
 	"os"
@@ -40,8 +39,6 @@ func Generate(input, output string, ormType model.ORMType) error {
 					return err
 				}
 				data.Tables = append(data.Tables, tables...)
-
-				ast.Print(fset, f)
 				return nil
 			}()
 			if err != nil {

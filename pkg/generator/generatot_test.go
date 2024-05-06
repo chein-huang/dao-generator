@@ -2,13 +2,15 @@
  * @Author: huangcheng1 huangcheng1@sensetime.com
  * @Date: 2024-04-28 10:46:05
  * @LastEditors: huangcheng1 huangcheng1@sensetime.com
- * @LastEditTime: 2024-04-30 16:04:58
+ * @LastEditTime: 2024-05-06 11:16:54
  * @FilePath: /dao-generator/pkg/generator/generatot_test.go
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 package generator_test
 
 import (
+	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/chein-huang/dao-generator/pkg/generator"
@@ -16,10 +18,22 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var workspaceDir string
+
+func init() {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("Failed to get current file path")
+	}
+
+	workspaceDir = filepath.Join(filepath.Dir(filename), "../..")
+}
+
 func TestGenerateWithData(t *testing.T) {
 	ass := require.New(t)
-	inputDir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/test_file"
-	outputDir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/output"
+
+	inputDir := filepath.Join(workspaceDir, "pkg/generator/test_file")
+	outputDir := filepath.Join(workspaceDir, "pkg/generator/output")
 	err := generator.Generate(inputDir, outputDir, model.ORMTypeGorm)
 	ass.NoError(err)
 }
@@ -87,7 +101,7 @@ func TestGenerationMetaData(t *testing.T) {
 		},
 	}
 
-	dir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/output"
+	dir := filepath.Join(workspaceDir, "pkg/generator/output")
 	err := generator.GenByTemplate(&data, dir, true)
 	ass.NoError(err)
 }
@@ -111,7 +125,7 @@ func TestParseGenFlags(t *testing.T) {
 
 func TestGetPackagePath(t *testing.T) {
 	ass := require.New(t)
-	path, err := generator.GetPackagePath("/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/test_file")
+	path, err := generator.GetPackagePath(filepath.Join(workspaceDir, "pkg/generator/test_file"))
 	ass.NoError(err)
 	ass.Equal("github.com/chein-huang/dao-generator/pkg/generator/test_file", path)
 }
