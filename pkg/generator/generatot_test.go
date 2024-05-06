@@ -2,14 +2,13 @@
  * @Author: huangcheng1 huangcheng1@sensetime.com
  * @Date: 2024-04-28 10:46:05
  * @LastEditors: huangcheng1 huangcheng1@sensetime.com
- * @LastEditTime: 2024-04-29 15:48:53
+ * @LastEditTime: 2024-04-30 16:04:58
  * @FilePath: /dao-generator/pkg/generator/generatot_test.go
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 package generator_test
 
 import (
-	"embed"
 	"testing"
 
 	"github.com/chein-huang/dao-generator/pkg/generator"
@@ -17,28 +16,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-//go:embed test_file/approval.go
-var approval embed.FS
-
-func TestGenerate(t *testing.T) {
-	ass := require.New(t)
-	f, err := approval.Open("test_file/approval.go")
-	ass.NoError(err)
-	defer f.Close()
-
-	dir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/output"
-	err = generator.GenerateWithData(f, dir, model.ORMTypeGorm)
-	ass.NoError(err)
-}
-
 func TestGenerateWithData(t *testing.T) {
 	ass := require.New(t)
-	f, err := approval.Open("test_file/approval.go")
-	ass.NoError(err)
-	defer f.Close()
-
-	dir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/output"
-	err = generator.GenerateWithData(f, dir, model.ORMTypeGorm)
+	inputDir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/test_file"
+	outputDir := "/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/output"
+	err := generator.Generate(inputDir, outputDir, model.ORMTypeGorm)
 	ass.NoError(err)
 }
 
@@ -125,4 +107,11 @@ func TestParseGenFlags(t *testing.T) {
 		generator.ParseGenFlags(text, table)
 		ass.Equal("approval_info", table.Name, "text: %q", text)
 	}
+}
+
+func TestGetPackagePath(t *testing.T) {
+	ass := require.New(t)
+	path, err := generator.GetPackagePath("/home/huangcheng1/github/chein-huang/dao-generator/pkg/generator/test_file")
+	ass.NoError(err)
+	ass.Equal("github.com/chein-huang/dao-generator/pkg/generator/test_file", path)
 }

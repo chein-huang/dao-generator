@@ -2,7 +2,7 @@
  * @Author: huangcheng1 huangcheng1@sensetime.com
  * @Date: 2024-03-21 16:20:15
  * @LastEditors: huangcheng1 huangcheng1@sensetime.com
- * @LastEditTime: 2024-03-21 16:35:48
+ * @LastEditTime: 2024-04-30 16:39:45
  * @FilePath: /dao-generator/cmd/root.go
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -45,9 +45,9 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra)")
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

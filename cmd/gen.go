@@ -2,7 +2,7 @@
  * @Author: huangcheng1 huangcheng1@sensetime.com
  * @Date: 2024-04-28 10:16:01
  * @LastEditors: huangcheng1 huangcheng1@sensetime.com
- * @LastEditTime: 2024-04-28 11:02:20
+ * @LastEditTime: 2024-04-30 16:57:04
  * @FilePath: /dao-generator/cmd/gen.go
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */

@@ -28,6 +28,7 @@ type GenerationField struct {
 	Type      string
 	Order     bool
 	Range     bool
+	In        bool
 }
 
 type GenerationPreload struct {
